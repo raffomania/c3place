@@ -1,17 +1,24 @@
 use eframe::web::web_location;
-use egui::{Align, CentralPanel, Layout, MenuBar, TopBottomPanel, widgets};
+use egui::{
+    Align, CentralPanel, Image, ImageSource, Layout, MenuBar, Rect, TextureFilter, TextureOptions,
+    TopBottomPanel, widgets,
+};
 
 /// We derive Deserialize/Serialize so we can persist app state on shutdown.
 #[derive(serde::Deserialize, serde::Serialize)]
 #[serde(default)] // if we add new fields, give them default values when deserializing old state
 pub struct App {
     base_url: String,
+    scene_rect: Rect,
 }
 
 impl Default for App {
     fn default() -> Self {
         let base_url = web_location().origin;
-        Self { base_url }
+        Self {
+            base_url,
+            scene_rect: Rect::ZERO,
+        }
     }
 }
 
@@ -46,11 +53,21 @@ impl eframe::App for App {
 
         CentralPanel::default().show(ctx, |ui| {
             // The central panel the region left after adding TopPanel's and SidePanel's
-            egui::Area::new(egui::Id::new("my_area"))
-                .constrain(false)
-                .show(ctx, |ui| {
+            egui::Scene::new()
+                .zoom_range(0.01..=2.0)
+                .show(ui, &mut self.scene_rect, |ui| {
                     ui.label("uwu");
-                    ui.image(format!("{}/img/owl.jpg", self.base_url));
+
+                    let filter = TextureFilter::Nearest;
+                    let image = Image::new(ImageSource::Uri(
+                        format!("{}/img/pumpkin.png", self.base_url).into(),
+                    ))
+                    .texture_options(TextureOptions {
+                        magnification: filter,
+
+                        ..Default::default()
+                    });
+                    ui.add(image);
                 });
 
             ui.with_layout(Layout::bottom_up(Align::LEFT), |ui| {
