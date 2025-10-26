@@ -23,6 +23,8 @@ log = "0.4.27"
 serde = { version = "1.0.219", features = ["derive"] }
 wasm-bindgen-futures = "0.4.50"
 web-sys = "0.3.70"              # to access the DOM (to hide the loading text)
+egui_extras = { version = "0.33.0", features = ["image", "http"] }
+image = { version = "0.25.8", features = ["jpeg"], default-features = false }
 
 [profile.release]
 opt-level = 2 # fast and small wasm
