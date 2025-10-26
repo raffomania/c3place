@@ -1,0 +1,11 @@
+{
+    "name": "C3place",
+    "short_name": "c3place",
+    "icons": [],
+    "lang": "en-US",
+    "id": "/index.html",
+    "start_url": "./index.html",
+    "display": "standalone",
+    "background_color": "white",
+    "theme_color": "white"
+}
